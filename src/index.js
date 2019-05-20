@@ -1,12 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDom from 'react-dom'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import { Provider } from 'react-redux'
+import { BrowserRouter, Route, Switch } from 'react-router-dom' // , Redirect,
+import Login from './views/login/login'
+import Register from './views/register/register'
+import BossInfo from './views/bossinfo/bossinfo'
+import Geniusinfo from './views/geniusinfo/geniusinfo'
+import Chat from './views/chat/chat'
+import Dashboard from './compontent/dashboard'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import reducers from './reducer'
+import './config'
+import './static/index.scss'
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const store = createStore(reducers, compose(
+	applyMiddleware(thunk),
+	window.devToolsExtension?window.devToolsExtension():f=>f
+))
+
+ReactDom.render(
+	(<Provider store={store}>
+		<BrowserRouter>
+			<div>
+				
+				<Switch>
+					<Route path="/bossinfo" component={BossInfo} />
+					<Route path="/geniusinfo" component={Geniusinfo} />
+					<Route path="/login" component={Login} />
+					<Route path="/register" component={Register} />
+					<Route path='/chat/:user' component={Chat} />
+					<Route component={Dashboard} />
+				</Switch>
+			</div>
+		</BrowserRouter>
+	</Provider>),
+	document.getElementById('root')
+)
